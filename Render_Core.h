@@ -23,32 +23,32 @@
 
 struct Load_Data
 {
-    std::string fname;
-    int w,h;
+  std::string fname;
+  int w,h;
 };
 
 //TODO make Render_core a singleton
 class Render_Core
 {
 public:
-    Render_Core(int width, int height);
-    int get_width();
-    int get_height();
-    bool chk_quit();
-    virtual ~Render_Core();
-    void set_title(const std::string &my_title);
-    void draw_image(Image_Data*, int x, int y, int index);
-    void clear_screen();
-    void blit_screen();
-    std::vector<Image_Data> sprites;
+  Render_Core(int width, int height);
+  int get_width();
+  int get_height();
+  bool chk_quit();
+  virtual ~Render_Core();
+  void set_title(const std::string &my_title);
+  void draw_image(Image_Data*, int x, int y, int index);
+  void clear_screen();
+  void blit_screen();
+  std::vector<Image_Data> sprites;
 private:
-    int height;
-    int width;
-    //std::map<std::string, SDL_Surface*> images;
-    
-    void load_sprites(const std::string &url);
-    SDL_Surface* screen;
-    SDL_Rect screen_rect;
+  int height;
+  int width;
+  //std::map<std::string, SDL_Surface*> images;
+  
+  void load_sprites(const std::string &url);
+  SDL_Surface* screen;
+  SDL_Rect screen_rect;
 };
 
 #endif // RENDER_CORE_H

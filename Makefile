@@ -2,7 +2,6 @@ OBJS = main.o Engine.o Render_Core.o Ship.o Emitter.o Actor.o Path.o Image_Data.
 
 ShmupFramework: $(OBJS)
 	g++ -o ShmupFramework $(OBJS) -lSDL
-	make clean
 
 main.o: main.cpp Engine.h Engine.h
 	g++ -c main.cpp
