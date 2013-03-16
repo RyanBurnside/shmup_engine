@@ -4,7 +4,7 @@
 Render_Core::Render_Core(int width, int height)
 {
   //ctor
-  if ( SDL_Init(SDL_INIT_VIDEO) < 0 )
+  if (SDL_Init(SDL_INIT_VIDEO) < 0 )
   {
     printf( "Unable to init SDL: %s\n", SDL_GetError() );
     exit(1);
@@ -18,7 +18,7 @@ Render_Core::Render_Core(int width, int height)
   screen = SDL_SetVideoMode(width, height, 16,
 			    SDL_HWSURFACE|SDL_DOUBLEBUF);
   
-  if ( !screen )
+  if (!screen)
   {
     printf("Unable to set video: %s\n", SDL_GetError());
     exit(1);
@@ -137,7 +137,7 @@ void Render_Core::draw_image(Image_Data* sprite, int x, int y, int index = 0)
 void Render_Core::clear_screen()
 {
   // clear screen
-  SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 31, 31, 63));
+  SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 }
 
 void Render_Core::blit_screen()

@@ -39,15 +39,6 @@ private:
   int num_shots, halt_steps;
   int num_actions;
   float spread_angle, shot_speed, direction;
-  
-  //***RYAN THESE GET REPLACED IN THE GIANT FLAG MATCHING CASE STATEMENT NO FUNCTIONS NEEDED***
-  void set_shot_number(int num_shots); // gets demoted to int
-  void set_spread_angle(float angle);
-  void set_shot_speed(float speed);
-  void set_direction(float direction);
-  void incriment_direction(float incriment);
-  void pause_steps(int steps); // gets demoted to int
-  void fire(int pause_after); // gets demoted to int
 };
 
 

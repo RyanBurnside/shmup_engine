@@ -33,6 +33,7 @@ Image_Data::Image_Data(std::string pathname, std::string fname, int frame_w,
 	  x * frame_w, y * frame_h, frame_w, frame_h});
     }
   }
+  SDL_SetColorKey(this->base_image, SDL_SRCCOLORKEY, SDL_MapRGB(this->base_image->format, 255, 0, 255) );
   
   std::cout << "Loaded" << fname << std::endl;
 }

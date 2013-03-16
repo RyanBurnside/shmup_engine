@@ -29,14 +29,6 @@ Emitter::~Emitter()
   //dtor
 }
 
-void Emitter::set_shot_number(int num_shots) {}
-void Emitter::set_spread_angle(float angle) {}
-void Emitter::set_shot_speed(float speed) {}
-void Emitter::set_direction(float direction) {}
-void Emitter::incriment_direction(float incriment) {}
-void Emitter::pause_steps(int steps) {}
-void Emitter::fire(int pause_after) {}
-
 void Emitter::add_attribute(int function_id, float parameter)
 {
   // the int is a constant from the human-readable flags
