@@ -18,7 +18,7 @@ Render_Core.o: Render_Core.cpp Render_Core.h
 Ship.o: Ship.cpp Ship.h Actor.h Path.h 
 	g++ -c Ship.cpp
 
-Emitter.o: Emitter.cpp Emitter.h
+Emitter.o: Emitter.cpp Actor.h Emitter.h
 	g++ -c Emitter.cpp
 
 Actor.o: Actor.cpp Actor.h

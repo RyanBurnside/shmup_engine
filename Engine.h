@@ -10,7 +10,6 @@
 
 class Engine
 {
-  
 public:
   static std::list<Ship> ships;
   Engine(int width, int height, std::string my_title); // may not invoke create directly
@@ -27,6 +26,4 @@ private:
   
   void update_actors();
 };
-
-
 #endif // ENGINE_H
