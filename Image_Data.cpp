@@ -7,7 +7,7 @@ Image_Data::Image_Data(std::string pathname, std::string fname, int frame_w,
   this->fname = fname;
   this->frame_w = frame_w;
   this->frame_h = frame_h;
-  
+
   // Load SDL_bitmap
   this-> base_image = SDL_LoadBMP(pathname.c_str());
   
@@ -24,16 +24,18 @@ Image_Data::Image_Data(std::string pathname, std::string fname, int frame_w,
     exit(1);
   }
   
-  // generate the SDL rectangles for subimages
+  // Generate the SDL rectangles for subimages
   for(int y = 0; y < num_down; ++y)
   {
     for(int x = 0; x < num_across; ++x)
     {
-      this->frames.push_back((SDL_Rect){
-	  x * frame_w, y * frame_h, frame_w, frame_h});
+      this->frames.push_back((SDL_Rect)
+			     {x * frame_w, y * frame_h, frame_w, frame_h});
     }
   }
-  SDL_SetColorKey(this->base_image, SDL_SRCCOLORKEY, SDL_MapRGB(this->base_image->format, 255, 0, 255) );
+
+  SDL_SetColorKey(this->base_image, SDL_SRCCOLORKEY, 
+		  SDL_MapRGB(this->base_image->format, 255, 0, 255));
   
   std::cout << "Loaded" << fname << std::endl;
 }

@@ -27,6 +27,7 @@ public:
   static const int AIM_DIRECTION;
   static const int INCRIMENT_DIRECTION;
   static const int PAUSE;
+  static const int SET_FRAME;
   static const int FIRE;
 
   void add_attribute(int function_id, float parameter);
@@ -35,8 +36,10 @@ public:
   void set_y(float y);
   float get_x();
   float get_y();
+
 private:
   float x, y;
+  int start_frame;
   std::vector<int> actions; // works on enum table for function name
   std::vector<float> parms;
   Image_Data* sprite;
@@ -46,6 +49,6 @@ private:
   int pointer_position; // position of the instruction pointer
   int num_shots, halt_steps;
   int num_actions;
-  float spread_angle, shot_speed, direction;
+  float spread_angle, shot_speed, direction, incriment_direction;
 };
 #endif // EMITTER_H

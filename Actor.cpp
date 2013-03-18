@@ -1,7 +1,8 @@
 #include "Actor.h"
 #include <math.h>
 
-Actor::Actor(float x, float y, float speed, float direction, int width, int height, Image_Data* sprite = 0)
+Actor::Actor(float x, float y, float speed, float direction, int width, 
+	     int height, Image_Data* sprite = 0)
 {
   
   this->x = x;
@@ -11,12 +12,12 @@ Actor::Actor(float x, float y, float speed, float direction, int width, int heig
   this->width = width;
   this->height = height;
   this->sprite = sprite;
-  
+  this->frame = 0;
+
   // These are never to be set manually by the programmer
   this->x_step = cos(direction) * speed;
   this->y_step = sin(direction) * speed;
 }
-
 
 void Actor::set_x(float x)
 {
@@ -42,6 +43,7 @@ void Actor::set_width(int width)
 {
   this->width = width;
 }
+
 int Actor::get_width()
 {
   return width;
@@ -56,6 +58,16 @@ int Actor::get_height()
 {
   return height;
 }
+  
+int Actor::get_frame()
+{
+  return frame;
+}
+
+void Actor::set_frame(int frame)
+{
+  this->frame = frame;
+}
 
 void Actor::set_sprite(Image_Data* sprite)
 {
@@ -69,20 +81,19 @@ Image_Data* Actor::get_sprite()
 
 float Actor::get_direction()
 {
-    return direction;
+  return direction;
 }
-
 
 void Actor::set_direction(float dir)
 {
-    direction = dir;
-    x_step = cos(direction) * speed;
-    y_step = sin(direction) * speed;
+  direction = dir;
+  x_step = cos(direction) * speed;
+  y_step = sin(direction) * speed;
 }
 
 float Actor::get_speed()
 {
-        return speed;
+  return speed;
 }
 
 void Actor::set_speed(float new_speed)

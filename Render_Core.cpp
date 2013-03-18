@@ -1,6 +1,5 @@
 #include "Render_Core.h"
 
-
 Render_Core::Render_Core(int width, int height)
 {
   //ctor
@@ -15,8 +14,7 @@ Render_Core::Render_Core(int width, int height)
   atexit(SDL_Quit);
   
   // create a new window
-  screen = SDL_SetVideoMode(width, height, 16,
-			    SDL_HWSURFACE|SDL_DOUBLEBUF);
+  screen = SDL_SetVideoMode(width, height, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
   
   if (!screen)
   {
@@ -24,7 +22,7 @@ Render_Core::Render_Core(int width, int height)
     exit(1);
     //return 1;
   }
-  screen_rect = (SDL_Rect){0,0,width, height};
+  screen_rect = (SDL_Rect){0, 0, width, height};
   
   // set height and width
   this->height = height;
@@ -33,7 +31,6 @@ Render_Core::Render_Core(int width, int height)
   // load_sprites here
   load_sprites("./images");
 }
-
 
 int Render_Core::get_width()
 {
@@ -54,16 +51,14 @@ void Render_Core::load_sprites(const std::string &url)
   std::string line_value, sub_w, sub_h;
   std::stringstream converter;
   int w_size, h_size;
-  
-  
+    
   if(config.is_open())
   {
     std::cout << "Found images/sprite_info.dat\n";
     while(config.good())
     {
       std::getline(config, line_value);
-      std::string name = line_value.substr(0,
-					   line_value.find_first_of(','));
+      std::string name = line_value.substr(0, line_value.find_first_of(','));
       
       // read through the sprite data file and create images
       if(name != "")
@@ -84,8 +79,7 @@ void Render_Core::load_sprites(const std::string &url)
 	converter >> h_size;
 	
 	// now create the Image_data object and add it to the vector
-	sprites.push_back(Image_Data("images/"+name, name,
-				     w_size, h_size));
+	sprites.push_back(Image_Data("images/"+name, name, w_size, h_size));
       }
     }
     config.close();
@@ -95,36 +89,35 @@ void Render_Core::load_sprites(const std::string &url)
     std::cout << "File images/sprite_info.dat not found!";
     exit(1);
   }
-  
 }
 
 bool Render_Core::chk_quit()
 {
-  // message processing loop
+  // Message processing loop
   SDL_Event event;
   while (SDL_PollEvent(&event))
   {
-    // check for messages
+    // Check for messages
     switch (event.type)
     {
-      // exit if the window is closed
+      // Exit if the window is closed
     case SDL_QUIT:
       return true;
-      // check for keypresses
+      // Check for keypresses
     case SDL_KEYDOWN:
     {
-      // exit if ESCAPE is pressed
+      // Exit if ESCAPE is pressed
       if (event.key.keysym.sym == SDLK_ESCAPE)
 	return true;
     }
-    } // end switch
-  } // end of message processing
+    } // End switch
+  } // End of message processing
   return false;
 }
 
 void Render_Core::draw_image(Image_Data* sprite, int x, int y, int index = 0)
 {
-  // draw the Image_Data to the screen
+  // Draw the Image_Data to the screen
   // 0 is by default the first image, -1 will be the last
   SDL_Rect end;
   end.x = x;
@@ -136,7 +129,7 @@ void Render_Core::draw_image(Image_Data* sprite, int x, int y, int index = 0)
 
 void Render_Core::clear_screen()
 {
-  // clear screen
+  // Clear screen
   SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 }
 

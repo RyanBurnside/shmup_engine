@@ -23,6 +23,9 @@ public:
   virtual void set_height(int height);
   virtual int get_height();
   
+  virtual int get_frame();
+  virtual void set_frame(int frame);
+
   virtual void set_sprite(Image_Data* sprite);
   virtual Image_Data* get_sprite();
   
@@ -41,6 +44,7 @@ protected:
   float y;
   int width;
   int height;
+  int frame;
   Image_Data* sprite;
   
   // These vars should never be adjusted directly, they affect each other

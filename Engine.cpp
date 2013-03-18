@@ -13,38 +13,62 @@ Engine::Engine(int width, int height, std::string my_title = "")
   this->height = height;
   this->width = width;
   
-  // instanciate the new graphics core
+  // Instanciate the graphics core
   this->rcore = new Render_Core(width, height);
   this->rcore->set_title(my_title);
 }
 
 void Engine::main_loop()
 {
+  Emitter e(120, 120, &rcore->sprites[0], &bullets);
+  e.add_attribute(Emitter::SHOT_NUMBER, 4);
+  e.add_attribute(Emitter::AIM_DIRECTION, 0.0);
+  e.add_attribute(Emitter::SPREAD_ANGLE, 6.28);
+  e.add_attribute(Emitter::SHOT_SPEED, 1.5);
+  e.add_attribute(Emitter::INCRIMENT_DIRECTION, .2);
+  e.add_attribute(Emitter::FIRE, 15);
 
-  // Make a bullet emitter to test
-  Emitter e(120, 120, &rcore->sprites[0], &bullets); 
-  e.add_attribute(e.SHOT_NUMBER, 20);
-  e.add_attribute(e.SHOT_SPEED, 3);
-  e.add_attribute(e.SPREAD_ANGLE, 360);
-  e.add_attribute(e.FIRE, 2);
+  Emitter g(360, 120, &rcore->sprites[0], &bullets);
+  g.add_attribute(Emitter::SHOT_NUMBER, 4);
+  g.add_attribute(Emitter::AIM_DIRECTION, 3.14);
+  g.add_attribute(Emitter::SPREAD_ANGLE, 6.28);
+  g.add_attribute(Emitter::SHOT_SPEED, 1.5);
+  g.add_attribute(Emitter::INCRIMENT_DIRECTION, -.2);
+  g.add_attribute(Emitter::FIRE, 15);
 
-  Emitter f(240, 120, &rcore->sprites[0], &bullets); 
-  f.add_attribute(f.SHOT_NUMBER, 20);
-  f.add_attribute(f.SHOT_SPEED, 3);
-  f.add_attribute(f.SPREAD_ANGLE, 360);
-  f.add_attribute(f.FIRE, 2);
-
-  Emitter g(360, 120, &rcore->sprites[0], &bullets); 
-  g.add_attribute(g.SHOT_NUMBER, 20);
-  g.add_attribute(g.SHOT_SPEED, 3);
-  g.add_attribute(g.SPREAD_ANGLE, 360);
-  g.add_attribute(g.FIRE, 2);
+  Emitter h(240, 120, &rcore->sprites[0], &bullets);
+  h.add_attribute(Emitter::SHOT_NUMBER, 6);
+  h.add_attribute(Emitter::AIM_DIRECTION, 3.14);
+  h.add_attribute(Emitter::SPREAD_ANGLE, 6.28);
+  h.add_attribute(Emitter::SHOT_SPEED, 1.5);
+  h.add_attribute(Emitter::SET_FRAME, 1);
+  for(int i = 0; i < 6; ++i)
+  {
+    h.add_attribute(Emitter::FIRE, 6); 
+  }
+  h.add_attribute(Emitter::AIM_DIRECTION, 6.28 / 12.0);
+  h.add_attribute(Emitter::SET_FRAME, 0);
+  for(int i = 0; i < 6; ++i)
+  {
+    h.add_attribute(Emitter::FIRE, 6); 
+  }
+  h.add_attribute(Emitter::PAUSE, 300);
+  h.add_attribute(Emitter::FIRE, 30);
+  h.add_attribute(Emitter::SHOT_NUMBER, 30);
+  h.add_attribute(Emitter::SET_FRAME, 1);
+  h.add_attribute(Emitter::FIRE, 30);
+  h.add_attribute(Emitter::SET_FRAME, 0);
+  h.add_attribute(Emitter::FIRE, 30);
+  h.add_attribute(Emitter::SET_FRAME, 1);
+  h.add_attribute(Emitter::FIRE, 30);
+  h.add_attribute(Emitter::SET_FRAME, 0);
+  h.add_attribute(Emitter::FIRE, 30);
 
   while(rcore->chk_quit() == false)
   {
     e.update();
-    f.update();
     g.update();
+    h.update();
     rcore->clear_screen();
 
     // Updates
@@ -55,21 +79,26 @@ void Engine::main_loop()
 
 void Engine::update_actors()
 {
-  std::list<Actor>::iterator iter;
-  for(iter = bullets.begin(); iter != bullets.end(); ++iter)
+  std::list<Actor>::iterator iter = bullets.begin();
+  while(iter != bullets.end())
   {
     if(iter->get_x() >= 0 && iter->get_y() >= 0 &&
-       iter->get_x() <= rcore->get_width() && iter->get_y() <= rcore->get_height())
+       iter->get_x() <= rcore->get_width() && 
+       iter->get_y() <= rcore->get_height())
     {
       iter->move();
       if(iter->get_sprite() != 0)
-	// TODO this currently just draws frame 0
-	// YOU NEED TO ADD A CUERRENT FRAME VAR to the Image_Data type
-	rcore->draw_image(iter->get_sprite(), iter->get_x(), iter->get_y(), 0);
+        // this is ugly code, fix all the crazy dereferences later
+	rcore->draw_image(iter->get_sprite(), 
+			  iter->get_x() - (iter->get_width() / 2.0),
+			  iter->get_y() - (iter->get_height() / 2.0),
+			  iter->get_frame());
+      iter++;
     }
     else
     {
       // remove actor here
+      iter = bullets.erase(iter);
     }
   }
 }
@@ -77,7 +106,6 @@ void Engine::update_actors()
 Engine::~Engine()
 {
   //dtor
-
   //clean up
   delete rcore;
 }

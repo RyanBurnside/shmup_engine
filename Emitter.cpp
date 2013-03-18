@@ -10,7 +10,8 @@ const int Emitter::SHOT_SPEED = 3;
 const int Emitter::AIM_DIRECTION = 4;
 const int Emitter::INCRIMENT_DIRECTION = 5;
 const int Emitter::PAUSE = 6;
-const int Emitter::FIRE = 7;
+const int Emitter::SET_FRAME = 7;
+const int Emitter::FIRE = 8;
 
 Emitter::Emitter(float x, float y, Image_Data* sprite, std::list<Actor>* storage)
 {
@@ -22,6 +23,8 @@ Emitter::Emitter(float x, float y, Image_Data* sprite, std::list<Actor>* storage
   this->halt_steps = 0;
   this->sprite = sprite;
   this->storage = storage;
+  this->incriment_direction = 0.0;
+  this->start_frame = 0;
 }
 
 Emitter::~Emitter()
@@ -50,50 +53,62 @@ void Emitter::update()
     {
     case SHOT_NUMBER:
       // Set shot number
-// cout << "Set Shot Number " << parms[pointer_position] << endl;
+      // cout << "Set Shot Number " << parms[pointer_position] << endl;
       num_shots = int(parms[pointer_position]);
       break;
       
     case SPREAD_ANGLE:
       // Set spread angle
-// cout << "Set Spread Angle " << parms[pointer_position] << endl;
+      // cout << "Set Spread Angle " << parms[pointer_position] << endl;
       spread_angle = parms[pointer_position];
       break;
       
     case SHOT_SPEED:
       // Set speed of shots
-// cout << "Set Shot Speed "<< parms[pointer_position] << endl;
+      // cout << "Set Shot Speed "<< parms[pointer_position] << endl;
       shot_speed = parms[pointer_position];
       break;
       
     case AIM_DIRECTION:
       // Set the direction Emitter is aiming
-// cout << "Set Aim " << parms[pointer_position] << endl;
+      // cout << "Set Aim " << parms[pointer_position] << endl;
       direction = parms[pointer_position];
       break;
       
     case INCRIMENT_DIRECTION:
       // Set the amount to be incrimented with each update
       // BAD IDEA IMPLIMENT LATER
-// cout << "Changing angle, current angle " << direction + parms[pointer_position];
+      // cout << "Changing angle, current angle " 
+      // << direction + parms[pointer_position];
       
-      direction += parms[pointer_position];
+      incriment_direction  += parms[pointer_position];
       break;
-      
+        
     case PAUSE:
       // pause for x many steps
-// cout << "Set Pause" << endl;
+      // cout << "Set Pause" << endl;
       halt_steps = parms[pointer_position];
       break;
+
+    case SET_FRAME:
+      start_frame = int(parms[pointer_position]);
       
     case FIRE:
       // shoot with optional delay
-// cout << "Fire!" << endl;
+      // cout << "Fire!" << endl;
+      direction += incriment_direction;
       halt_steps = parms[pointer_position];
+      float half_angle = spread_angle / 2.0;
+      float aim_start = direction - half_angle;
+      float step_angle = spread_angle / num_shots;
+
       for(int i = 0; i < num_shots; ++i)
       {
-	float r = (float)rand()/(float)RAND_MAX * 6.14;
-	storage->push_back(Actor(x, y, shot_speed, r, 16, 16, sprite));
+	float final_angle = aim_start + i * step_angle + (step_angle / 2.0);
+	storage->push_back(Actor(x, y, shot_speed, final_angle, 16, 16, 
+				 sprite));
+	// Set the sprite for the newly created Actor
+	storage->back().set_frame(start_frame);
       }
       break;
     }
@@ -101,7 +116,7 @@ void Emitter::update()
   }
   else
   {
-// cout << "Pausing" << endl;
+    // cout << "Pausing" << endl;
     halt_steps--;
   }
 }
