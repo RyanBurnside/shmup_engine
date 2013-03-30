@@ -1,7 +1,7 @@
 #ifndef EMITTER_H
 #define EMITTER_H
 
-#include "Actor.h"
+#include "Bullet.h"
 #include "Image_Data.h"
 #include <list>
 
@@ -17,7 +17,7 @@ struct EmitterAction
 class Emitter
 {
 public:
-  Emitter(float x, float y, Image_Data* sprite, std::list<Actor>* storage);
+  Emitter(float x, float y, Image_Data* sprite, std::list<Bullet>* storage);
   virtual ~Emitter();
 
   // Flags which are keys for the functon setter function
@@ -43,7 +43,7 @@ private:
   std::vector<int> actions; // works on enum table for function name
   std::vector<float> parms;
   Image_Data* sprite;
-  std::list<Actor>* storage;
+  std::list<Bullet>* storage;
 
   // Contains the position in the list
   int pointer_position; // position of the instruction pointer

@@ -1,10 +1,10 @@
 #include "Actor.h"
 #include <math.h>
+#include <iostream>
 
 Actor::Actor(float x, float y, float speed, float direction, int width, 
-	     int height, Image_Data* sprite = 0)
+	     int height, Image_Data* sprite, int frame)
 {
-  
   this->x = x;
   this->y = y;
   this->speed = speed;
@@ -12,7 +12,7 @@ Actor::Actor(float x, float y, float speed, float direction, int width,
   this->width = width;
   this->height = height;
   this->sprite = sprite;
-  this->frame = 0;
+  this->frame = frame;
 
   // These are never to be set manually by the programmer
   this->x_step = cos(direction) * speed;

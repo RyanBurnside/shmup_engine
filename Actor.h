@@ -9,7 +9,8 @@ class Actor
   // it is probably best for objects that simply move and have a sprite
   
 public:
-  Actor(float x, float y, float speed, float direction, int width, int height, Image_Data* sprite);
+  Actor(float x, float y, float speed, float direction, int width, int height, 
+	Image_Data* sprite = 0, int frame = 0);
   
   virtual void set_x(float x);
   virtual float get_x();
@@ -39,7 +40,6 @@ public:
   virtual ~Actor();
   
 protected:
-  
   float x;
   float y;
   int width;

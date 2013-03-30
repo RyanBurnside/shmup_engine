@@ -1,5 +1,6 @@
 #include "Engine.h"
 #include "Emitter.h"
+#include "Bullet.h"
 
 Engine::Engine(int width, int height, std::string my_title = "")
 {
@@ -20,54 +21,16 @@ Engine::Engine(int width, int height, std::string my_title = "")
 
 void Engine::main_loop()
 {
-  Emitter e(120, 120, &rcore->sprites[0], &bullets);
-  e.add_attribute(Emitter::SHOT_NUMBER, 4);
-  e.add_attribute(Emitter::AIM_DIRECTION, 0.0);
-  e.add_attribute(Emitter::SPREAD_ANGLE, 6.28);
-  e.add_attribute(Emitter::SHOT_SPEED, 1.5);
-  e.add_attribute(Emitter::INCRIMENT_DIRECTION, .2);
-  e.add_attribute(Emitter::FIRE, 15);
-
-  Emitter g(360, 120, &rcore->sprites[0], &bullets);
-  g.add_attribute(Emitter::SHOT_NUMBER, 4);
-  g.add_attribute(Emitter::AIM_DIRECTION, 3.14);
-  g.add_attribute(Emitter::SPREAD_ANGLE, 6.28);
-  g.add_attribute(Emitter::SHOT_SPEED, 1.5);
-  g.add_attribute(Emitter::INCRIMENT_DIRECTION, -.2);
-  g.add_attribute(Emitter::FIRE, 15);
-
-  Emitter h(240, 120, &rcore->sprites[0], &bullets);
-  h.add_attribute(Emitter::SHOT_NUMBER, 6);
+  
+  Emitter h(240, 120, &rcore->sprites[2], &bullets);
+  h.add_attribute(Emitter::SHOT_NUMBER, 32);
   h.add_attribute(Emitter::AIM_DIRECTION, 3.14);
   h.add_attribute(Emitter::SPREAD_ANGLE, 6.28);
   h.add_attribute(Emitter::SHOT_SPEED, 1.5);
-  h.add_attribute(Emitter::SET_FRAME, 1);
-  for(int i = 0; i < 6; ++i)
-  {
-    h.add_attribute(Emitter::FIRE, 6); 
-  }
-  h.add_attribute(Emitter::AIM_DIRECTION, 6.28 / 12.0);
-  h.add_attribute(Emitter::SET_FRAME, 0);
-  for(int i = 0; i < 6; ++i)
-  {
-    h.add_attribute(Emitter::FIRE, 6); 
-  }
-  h.add_attribute(Emitter::PAUSE, 300);
-  h.add_attribute(Emitter::FIRE, 30);
-  h.add_attribute(Emitter::SHOT_NUMBER, 30);
-  h.add_attribute(Emitter::SET_FRAME, 1);
-  h.add_attribute(Emitter::FIRE, 30);
-  h.add_attribute(Emitter::SET_FRAME, 0);
-  h.add_attribute(Emitter::FIRE, 30);
-  h.add_attribute(Emitter::SET_FRAME, 1);
-  h.add_attribute(Emitter::FIRE, 30);
-  h.add_attribute(Emitter::SET_FRAME, 0);
-  h.add_attribute(Emitter::FIRE, 30);
+  h.add_attribute(Emitter::FIRE, 30); 
 
   while(rcore->chk_quit() == false)
   {
-    e.update();
-    g.update();
     h.update();
     rcore->clear_screen();
 
@@ -79,19 +42,30 @@ void Engine::main_loop()
 
 void Engine::update_actors()
 {
-  std::list<Actor>::iterator iter = bullets.begin();
+  //TODO look into templating all if possible
+  std::list<Bullet>::iterator iter = bullets.begin();
+  int half_width, half_height;  
+  float r_edge, l_edge, t_edge, b_edge;
+
   while(iter != bullets.end())
   {
-    if(iter->get_x() >= 0 && iter->get_y() >= 0 &&
-       iter->get_x() <= rcore->get_width() && 
-       iter->get_y() <= rcore->get_height())
+    half_width = iter->get_width() / 2; 
+    half_height = iter->get_height() / 2; 
+    r_edge = iter->get_x() + half_width;
+    l_edge = iter->get_x() - half_width;
+    t_edge = iter->get_y() - half_height;
+    b_edge = iter->get_y() + half_height;
+    iter->move();
+
+    if((r_edge >= 0 && b_edge >= 0) &&
+       (l_edge <= rcore->get_width() && 
+	t_edge <= rcore->get_height()))
     {
-      iter->move();
       if(iter->get_sprite() != 0)
         // this is ugly code, fix all the crazy dereferences later
 	rcore->draw_image(iter->get_sprite(), 
-			  iter->get_x() - (iter->get_width() / 2.0),
-			  iter->get_y() - (iter->get_height() / 2.0),
+			  iter->get_x() - half_width,
+			  iter->get_y() - half_height,
 			  iter->get_frame());
       iter++;
     }

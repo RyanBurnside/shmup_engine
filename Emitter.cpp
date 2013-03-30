@@ -10,21 +10,23 @@ const int Emitter::SHOT_SPEED = 3;
 const int Emitter::AIM_DIRECTION = 4;
 const int Emitter::INCRIMENT_DIRECTION = 5;
 const int Emitter::PAUSE = 6;
-const int Emitter::SET_FRAME = 7;
-const int Emitter::FIRE = 8;
+const int Emitter::FIRE = 7;
 
-Emitter::Emitter(float x, float y, Image_Data* sprite, std::list<Actor>* storage)
+Emitter::Emitter(float x, float y, Image_Data* sprite, std::list<Bullet>* storage)
 {
   //ctor
   this->x = x;
   this->y = y;
-  this->pointer_position = 0;
-  this->num_actions = 0;
+  this->direction = 0;
   this->halt_steps = 0;
+  this->incriment_direction = 0.0;
+  this->num_actions = 0;
+  this->num_shots = 1;
+  this->pointer_position = 0;
+  this->shot_speed = 1.0;
+  this->spread_angle = 6.28;
   this->sprite = sprite;
   this->storage = storage;
-  this->incriment_direction = 0.0;
-  this->start_frame = 0;
 }
 
 Emitter::~Emitter()
@@ -42,7 +44,7 @@ void Emitter::add_attribute(int function_id, float parameter)
 
 void Emitter::update()
 {
-  // Function sets member variables, pauses or fires off Actor instances
+  // Function sets member variables, pauses or fires off Bullet instances
   if(halt_steps == 0)
   {
     if(pointer_position >= num_actions)
@@ -90,9 +92,6 @@ void Emitter::update()
       halt_steps = parms[pointer_position];
       break;
 
-    case SET_FRAME:
-      start_frame = int(parms[pointer_position]);
-      
     case FIRE:
       // shoot with optional delay
       // cout << "Fire!" << endl;
@@ -105,10 +104,8 @@ void Emitter::update()
       for(int i = 0; i < num_shots; ++i)
       {
 	float final_angle = aim_start + i * step_angle + (step_angle / 2.0);
-	storage->push_back(Actor(x, y, shot_speed, final_angle, 16, 16, 
+	storage->push_back(Bullet(x, y, shot_speed, final_angle, 16, 16, 
 				 sprite));
-	// Set the sprite for the newly created Actor
-	storage->back().set_frame(start_frame);
       }
       break;
     }

@@ -21,7 +21,7 @@ private:
   Render_Core* rcore;
   std::list<Actor> enemies;
   std::list<Actor> players;
-  std::list<Actor> bullets;
+  std::list<Bullet> bullets;
   std::string game_title;
   
   void update_actors();

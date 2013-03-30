@@ -12,10 +12,9 @@ Image_Data::Image_Data(std::string pathname, std::string fname, int frame_w,
   this-> base_image = SDL_LoadBMP(pathname.c_str());
   
   // Create our SDL_rects
-  float num_across, num_down;
-  num_across = this->base_image->w / frame_w;
-  num_down = this->base_image->h / frame_h;
-  std::cout << "Num across " << num_across << " num down " << num_down << std::endl;
+  num_horizontal = this->base_image->w / frame_w;
+  num_vertical = this->base_image->h / frame_h;
+  std::cout << "Num across " << num_horizontal << " num down " << num_vertical << std::endl;
   
   // Ensure passed frame_w and frame_h are valid
   if(this->base_image->w % frame_w || this->base_image->h % frame_h )
@@ -25,9 +24,9 @@ Image_Data::Image_Data(std::string pathname, std::string fname, int frame_w,
   }
   
   // Generate the SDL rectangles for subimages
-  for(int y = 0; y < num_down; ++y)
+  for(int y = 0; y < num_vertical; ++y)
   {
-    for(int x = 0; x < num_across; ++x)
+    for(int x = 0; x < num_horizontal; ++x)
     {
       this->frames.push_back((SDL_Rect)
 			     {x * frame_w, y * frame_h, frame_w, frame_h});
