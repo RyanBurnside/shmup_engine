@@ -1,6 +1,7 @@
 // testing only
 #include "Emitter.h"
-#include <iostream>
+#include <cmath>
+
 using namespace std;
 
 // set the final values for all flags
@@ -24,7 +25,7 @@ Emitter::Emitter(float x, float y, Image_Data* sprite, std::list<Bullet>* storag
   this->num_shots = 1;
   this->pointer_position = 0;
   this->shot_speed = 1.0;
-  this->spread_angle = 6.28;
+  this->spread_angle = M_PI * 2.0;
   this->sprite = sprite;
   this->storage = storage;
 }

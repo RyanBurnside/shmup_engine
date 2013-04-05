@@ -17,21 +17,34 @@ Engine::Engine(int width, int height, std::string my_title = "")
   // Instanciate the graphics core
   this->rcore = new Render_Core(width, height);
   this->rcore->set_title(my_title);
+  this->peak_bullets = 0;
 }
 
 void Engine::main_loop()
 {
   
   Emitter h(240, 120, &rcore->sprites[2], &bullets);
-  h.add_attribute(Emitter::SHOT_NUMBER, 32);
+  h.add_attribute(Emitter::INCRIMENT_DIRECTION, .3);
+  h.add_attribute(Emitter::SHOT_NUMBER, 36);
   h.add_attribute(Emitter::AIM_DIRECTION, 3.14);
   h.add_attribute(Emitter::SPREAD_ANGLE, 6.28);
   h.add_attribute(Emitter::SHOT_SPEED, 1.5);
-  h.add_attribute(Emitter::FIRE, 30); 
+  h.add_attribute(Emitter::FIRE, 6); 
+
+Emitter i(240, 120, &rcore->sprites[0], &bullets);
+  i.add_attribute(Emitter::INCRIMENT_DIRECTION, .3);
+  i.add_attribute(Emitter::SHOT_NUMBER, 36);
+  i.add_attribute(Emitter::AIM_DIRECTION, 6.28);
+  i.add_attribute(Emitter::SPREAD_ANGLE, 6.28);
+  i.add_attribute(Emitter::SHOT_SPEED, 1.5);
+  i.add_attribute(Emitter::FIRE, 6); 
+
 
   while(rcore->chk_quit() == false)
   {
     h.update();
+    i.update();
+
     rcore->clear_screen();
 
     // Updates
@@ -57,9 +70,12 @@ void Engine::update_actors()
     b_edge = iter->get_y() + half_height;
     iter->move();
 
-    if((r_edge >= 0 && b_edge >= 0) &&
-       (l_edge <= rcore->get_width() && 
-	t_edge <= rcore->get_height()))
+    if(r_edge < 0 || t_edge < 0 || l_edge > width || b_edge > height)
+    {
+      // remove actor here
+      iter = bullets.erase(iter);
+    }
+    else
     {
       if(iter->get_sprite() != 0)
         // this is ugly code, fix all the crazy dereferences later
@@ -69,11 +85,11 @@ void Engine::update_actors()
 			  iter->get_frame());
       iter++;
     }
-    else
-    {
-      // remove actor here
-      iter = bullets.erase(iter);
-    }
+  }
+  if(peak_bullets < bullets.size())
+  {
+    peak_bullets = bullets.size();
+    std::cout << "Max bullets: " << peak_bullets << std::endl;
   }
 }
 
