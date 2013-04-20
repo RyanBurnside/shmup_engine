@@ -1,0 +1,14 @@
+#Look over code for problems
+
+echo ALERTS ---------------------------------------- > metrics
+cppcheck --enable=all  *.h -q 2>> metrics
+cppcheck --enable=all  *.cpp -q 2>> metrics
+
+echo LINES ----------------------------------------- >> metrics
+wc -l *.h *.cpp >> metrics
+
+echo PROJECT SIZE ---------------------------------- >> metrics
+du -h -c | tail -n 1 >> metrics
+
+echo Done creating metrics log.
+
