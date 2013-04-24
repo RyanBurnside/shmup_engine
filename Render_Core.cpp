@@ -1,6 +1,6 @@
 #include "Render_Core.h"
 
-Render_Core::Render_Core(int width, int height)
+Render_Core::Render_Core(short unsigned int width, short unsigned int height)
 {
   //ctor
   if (SDL_Init(SDL_INIT_VIDEO) < 0 )
@@ -32,12 +32,12 @@ Render_Core::Render_Core(int width, int height)
   load_sprites("./images");
 }
 
-int Render_Core::get_width()
+short unsigned int Render_Core::get_width()
 {
   return width;
 }
 
-int Render_Core::get_height()
+short unsigned int Render_Core::get_height()
 {
   return height;
 }
@@ -64,8 +64,8 @@ void Render_Core::load_sprites(const std::string &url)
       if(name != "")
       {
 	std::cout << "Name " << name << std::endl;
-	line_value = line_value.substr(line_value.find_first_of(',')+1);
-	sub_w = line_value.substr(line_value.find_first_of(',')+1,
+	line_value = line_value.substr(line_value.find_first_of(',') + 1);
+	sub_w = line_value.substr(line_value.find_first_of(',') + 1,
 				  line_value.find_last_of(','));
 	
 	sub_h = line_value.substr(line_value.find_last_of(',') + 1);
@@ -125,6 +125,15 @@ void Render_Core::draw_image(Image_Data* sprite, int x, int y, int index = 0)
   end.w = width - x;
   end.h = height - y;
   SDL_BlitSurface(sprite->base_image, &sprite->frames[index], screen, &end);
+}
+
+void Render_Core::draw_image_text(Image_Data* sprite, int x, int y, 
+				  std::string text)
+{
+  for(unsigned int i = 0; i < text.length(); ++i)
+  {
+    draw_image(sprite, x + i * sprite->get_w(), y, text[i]);
+  }
 }
 
 void Render_Core::clear_screen()

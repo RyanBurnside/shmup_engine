@@ -1,14 +1,32 @@
+#!/bin/bash
 #Look over code for problems
 
-echo ALERTS ---------------------------------------- > metrics
+echo PROJECT STATUS REPORT > metrics
+date >> metrics
+echo >> metrics
+echo ALERTS ---------------------------------------- >> metrics
 cppcheck --enable=all  *.h -q 2>> metrics
 cppcheck --enable=all  *.cpp -q 2>> metrics
 
+echo >> metrics
 echo LINES ----------------------------------------- >> metrics
 wc -l *.h *.cpp >> metrics
 
+echo >> metrics
 echo PROJECT SIZE ---------------------------------- >> metrics
 du -h -c | tail -n 1 >> metrics
 
-echo Done creating metrics log.
+echo >> metrics
+echo TODO------------------------------------------- >> metrics
 
+for f in *.h; 
+do 
+   echo file: $f >> metrics
+   cat $f | grep //.*TODO >> metrics
+done
+
+for f in *.cpp; 
+do 
+   echo file: $f >> metrics
+   cat $f | grep //.*TODO >> metrics	
+done

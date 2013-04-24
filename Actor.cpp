@@ -1,6 +1,5 @@
 #include "Actor.h"
-#include <math.h>
-#include <iostream>
+#include <cmath>
 
 Actor::Actor(float x, float y, float speed, float direction, int width, 
 	     int height, Image_Data* sprite, int frame)

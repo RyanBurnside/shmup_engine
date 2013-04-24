@@ -1,7 +1,8 @@
 #include "Image_Data.h"
 
-Image_Data::Image_Data(std::string pathname, std::string fname, int frame_w,
-                       int frame_h)
+Image_Data::Image_Data(std::string pathname, std::string fname, 
+		       short unsigned int frame_w, 
+		       short unsigned int frame_h)
 {
   this->pathname = pathname;
   this->fname = fname;
@@ -24,9 +25,9 @@ Image_Data::Image_Data(std::string pathname, std::string fname, int frame_w,
   }
   
   // Generate the SDL rectangles for subimages
-  for(int y = 0; y < num_vertical; ++y)
+  for(short unsigned int y = 0; y < num_vertical; ++y)
   {
-    for(int x = 0; x < num_horizontal; ++x)
+    for(short unsigned int x = 0; x < num_horizontal; ++x)
     {
       this->frames.push_back((SDL_Rect)
 			     {x * frame_w, y * frame_h, frame_w, frame_h});

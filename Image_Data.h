@@ -19,26 +19,26 @@ class Image_Data
 public:
   SDL_Surface * base_image; // No idea why this can't be private
   std::vector<SDL_Rect> frames;
-  Image_Data(std::string pathname, std::string fname, int frame_w, 
-	     int frame_h);
+  Image_Data(std::string pathname, std::string fname, 
+	     short unsigned int frame_w, short unsigned int frame_h);
   ~Image_Data();
   
-  int get_w()
+  short unsigned int get_w()
   {
     return frame_w;
   }
   
-  int get_h()
+  short unsigned int get_h()
   {
     return frame_h;
   }
 
-  int num_across()
+  short unsigned int num_across()
   {
     return num_horizontal;
   }
 
-  int num_down()
+  short unsigned int num_down()
   {
     return num_vertical;
   }
@@ -49,14 +49,14 @@ public:
     return fname;
   }
   
-  int count_frames()
+  short unsigned int count_frames()
   {
     return frames.size();
   }
 
 private:
   std::string fname, pathname;
-  int frame_w, frame_h, num_horizontal, num_vertical;
+  short unsigned int frame_w, frame_h, num_horizontal, num_vertical;
 };
 
 #endif // IMAGE_DATA_H_INCLUDED

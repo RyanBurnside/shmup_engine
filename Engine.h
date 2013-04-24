@@ -13,8 +13,6 @@ class Engine
 
 public:
   static std::list<Ship> ships;
-  int peak_bullets;
-
   Engine(int width, int height, std::string my_title); // may not invoke create directly
   void main_loop();
   virtual ~Engine();

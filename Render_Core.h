@@ -13,7 +13,6 @@
 #include<string>
 #include<vector>
 #include<dirent.h>
-#include<map>
 #include<fstream>
 #include<sstream>
 #include "Image_Data.h"
@@ -31,21 +30,22 @@ struct Load_Data
 class Render_Core
 {
 public:
-  Render_Core(int width, int height);
-  int get_width();
-  int get_height();
+  Render_Core(short unsigned int width, short unsigned int height);
+  short unsigned int get_width();
+  short unsigned int get_height();
   bool chk_quit();
   virtual ~Render_Core();
+
   void set_title(const std::string &my_title);
   void draw_image(Image_Data*, int x, int y, int index);
+  void draw_image_text(Image_Data*, int x, int y, std::string text);
   void clear_screen();
   void blit_screen();
   std::vector<Image_Data> sprites;
+
 private:
-  int height;
-  int width;
-  //std::map<std::string, SDL_Surface*> images;
-  
+  short unsigned int height;
+  short unsigned int width;
   void load_sprites(const std::string &url);
   SDL_Surface* screen;
   SDL_Rect screen_rect;

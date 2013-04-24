@@ -35,8 +35,8 @@ public:
   
   virtual void set_speed(float new_speed);
   virtual float get_speed();
-  
   virtual void move();
+  
   virtual ~Actor();
   
 protected:

@@ -11,7 +11,7 @@ Point(float new_x, float new_y) : x(new_x), y(new_y){}
 
 class Path
 {
-  // a collection of points along a Bezier curve
+  // A collection of points along a Bezier curve stored in std::vector
 public:
   Path();
   Path(std::vector<Point>& hull_points, int num_segs);
@@ -21,6 +21,7 @@ public:
 protected:
   Point midpoint(const Point& a, const Point& b, float dec_percent);
   Point bezier_point(float percent, const std::vector<Point>& vec);
+
 private:
 };
 
