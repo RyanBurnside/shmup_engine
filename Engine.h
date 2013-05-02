@@ -24,7 +24,7 @@ private:
   std::list<Actor> players;
   std::list<Bullet> bullets;
   std::string game_title;
-  
+
   void update_actors();
 };
 #endif // ENGINE_H

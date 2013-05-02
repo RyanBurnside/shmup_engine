@@ -10,7 +10,7 @@ class Actor
   
 public:
   Actor(float x, float y, float speed, float direction, int width, int height, 
-	Image_Data* sprite = 0, int frame = 0);
+	Image_Data* sprite = 0, int frame = 0, int health = 0);
   
   virtual void set_x(float x);
   virtual float get_x();
@@ -35,6 +35,10 @@ public:
   
   virtual void set_speed(float new_speed);
   virtual float get_speed();
+
+  virtual void set_health(int new_health);
+  virtual int get_health();
+
   virtual void move();
   
   virtual ~Actor();
@@ -45,6 +49,8 @@ protected:
   int width;
   int height;
   int frame;
+  int health;
+
   Image_Data* sprite;
   
   // These vars should never be adjusted directly, they affect each other

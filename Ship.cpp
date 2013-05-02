@@ -49,14 +49,7 @@ void Ship::update()
 
   if(path == 0)
   {
-    std::cout << "moving" << std::endl;
-    float x_before = x;
-    float y_before = y;
     Actor::move();
-    if(x != x_before || y != y_before)
-      std::cout << "Moved!" << std::endl;
-    else
-      std::cout << "Didn't Move  " << std::endl;
   }
   else
   {

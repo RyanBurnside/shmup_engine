@@ -8,7 +8,7 @@ ShmupFramework: $(OBJS)
 main.o: main.cpp Engine.h Engine.h
 	g++ -Wall -c main.cpp
 
-Engine.o: Engine.cpp Engine.h
+Engine.o: Engine.cpp Engine.h Emitter.o Bullet.o Ship.o Path.o Render_Core.o Actor.o Image_Data.o
 	g++ -Wall -c Engine.cpp
 
 Image_Data.o: Image_Data.cpp Image_Data.h

@@ -2,7 +2,7 @@
 #include <cmath>
 
 Actor::Actor(float x, float y, float speed, float direction, int width, 
-	     int height, Image_Data* sprite, int frame)
+	     int height, Image_Data* sprite, int frame, int health)
 {
   this->x = x;
   this->y = y;
@@ -12,7 +12,7 @@ Actor::Actor(float x, float y, float speed, float direction, int width,
   this->height = height;
   this->sprite = sprite;
   this->frame = frame;
-
+  this->health = health;
   // These are never to be set manually by the programmer
   this->x_step = cos(direction) * speed;
   this->y_step = sin(direction) * speed;
@@ -99,6 +99,15 @@ void Actor::set_speed(float new_speed)
 {
   x_step = cos(direction) * new_speed;
   y_step = sin(direction) * new_speed;
+}
+
+void Actor::set_health(int new_health)
+{
+  health = new_health;
+}
+int Actor::get_health()
+{
+  return health;
 }
 
 void Actor::move()

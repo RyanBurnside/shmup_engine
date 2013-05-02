@@ -3,7 +3,8 @@
 
 using namespace std;
 
-Emitter::Emitter(float x, float y, Image_Data* sprite, std::list<Bullet>* storage)
+Emitter::Emitter(float x, float y, Image_Data* sprite, 
+		 std::list<Bullet>* storage)
 {
   //ctor
   this->x = x;
@@ -89,6 +90,7 @@ void Emitter::update()
 	storage->push_back(Bullet(x, y, shot_speed, final_angle, 16, 16, 
 				 sprite));
       }
+
       break;
     }
     pointer_position++;

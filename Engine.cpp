@@ -4,6 +4,7 @@
 #include "Ship.h"
 #include "Path.h"
 #include <time.h>
+#include <sstream> // testing
 
 Engine::Engine(int width, int height, std::string my_title = "")
 {
@@ -23,71 +24,91 @@ Engine::Engine(int width, int height, std::string my_title = "")
 
 void Engine::main_loop()
 {
-  
   Emitter h(0, 0, &rcore->sprites[0], &bullets);
+  
   h.add_attribute(Emitter::AIM_DIRECTION, 3.14 / 2.0);
+  h.add_attribute(Emitter::SHOT_NUMBER, 16);
   h.add_attribute(Emitter::SPREAD_ANGLE, 6.28);
-  h.add_attribute(Emitter::SHOT_SPEED, 4.5);
-  for(int i = 0; i < 50; ++i)
+  h.add_attribute(Emitter::SHOT_SPEED, 4);
+  
+  for(int i = 0; i < 3; ++i)
   {
-    h.add_attribute(Emitter::SHOT_NUMBER, i);
-    h.add_attribute(Emitter::FIRE, 5); 
-  }
-  h.add_attribute(Emitter::PAUSE, 10); 
-  h.add_attribute(Emitter::SHOT_NUMBER, 30);
-  h.add_attribute(Emitter::INCRIMENT_DIRECTION, 6.28 / 100);
-  for(int i = 0; i < 50; ++i)
-  {
-    h.add_attribute(Emitter::FIRE, 5); 
-  }
-  h.add_attribute(Emitter::SHOT_NUMBER, 12);
-
-  h.add_attribute(Emitter::INCRIMENT_DIRECTION, 0.0);  
-  for(int i = 0; i < 50; ++i)
-  {  
-    h.add_attribute(Emitter::AIM_DIRECTION, 3.14 / 2.0);
-    h.add_attribute(Emitter::SPREAD_ANGLE, i / 49.0 * 6.28);
-    h.add_attribute(Emitter::FIRE, 0);
-    h.add_attribute(Emitter::AIM_DIRECTION, 6.28 * .75);
-    h.add_attribute(Emitter::SPREAD_ANGLE, i / 49.0 * 6.28);
-    h.add_attribute(Emitter::FIRE, 0); 
-  }
-  srand (time(NULL));
-  std::vector<Point> path_points;
-  for(int i = 0; i < 4; ++i)
-  {
-    path_points.push_back(Point(rand() % 480, rand() % 640));
+    h.add_attribute(Emitter::FIRE, 60);
   }
 
-  Path pathy(path_points, 1000);
-  Ship s(240.0, 0.0, .3, 3.14 / 2.0, 24, 24, &rcore->sprites[1], &pathy, .001);
-  s.add_Emitter(h);
-  while(rcore->chk_quit() == false)
+  h.add_attribute(Emitter::INCRIMENT_DIRECTION, 0.0);
+  h.add_attribute(Emitter::AIM_DIRECTION, 3.14 / 2.0);
+  h.add_attribute(Emitter::SHOT_NUMBER, 2);
+  h.add_attribute(Emitter::SPREAD_ANGLE, 6.28 / 4.0);
+  h.add_attribute(Emitter::SHOT_SPEED, 3);
+  for(int i = 0; i < 3; ++i)
   {
-	rcore->clear_screen();
-	rcore->draw_image_text(&rcore->sprites[1], 0, 0, 
-				 "Bullet Hell Engine");
-	s.update();
-	update_actors();
-	rcore->blit_screen();
+    h.add_attribute(Emitter::FIRE, 3); 
   }
-}
+
+
+  srand(time(NULL));
+  int num_ships = 3;
+
+  for(int j = 0; j < num_ships; ++j)
+  {
+    
+    Ship s(rand() % 480, rand() % 240, .75, 
+	   3.14 / 2.0, 32, 32, &rcore->sprites[4]);
+    s.add_Emitter(h);
+    ships.push_back(s);
+  }
+  std::stringstream ss; // used to append numbers to strings
+
+  // timing taken from http://sdl.beuc.net/sdl.wiki/Time_Examples
+
+  double nextFrame = static_cast<double>(SDL_GetTicks());
+  while(1)
+  {
+    if(rcore->chk_quit() == true)
+      exit(0);
+    rcore->clear_screen();
+    update_actors();
+    if(nextFrame > static_cast<double>(SDL_GetTicks()))
+    {
+      rcore->blit_screen();
+    }
+    
+    Uint32 delay = static_cast<Uint32>(nextFrame - 
+				       static_cast<double>(SDL_GetTicks()));
+    if(delay > 0)
+    {
+      SDL_Delay(delay);
+    }
+    nextFrame += 1000.0 / 60.0;
+  } 
+}   
 
 void Engine::update_actors()
 {
   //TODO look into templating all if possible
 
-  std::list<Ship>::iterator i;
-  for(i = ships.begin(); i != ships.end(); ++i)
-  {
-    i->update();
-
-  }
-
-  std::list<Bullet>::iterator iter = bullets.begin();
   int half_width, half_height;  
   float r_edge, l_edge, t_edge, b_edge;
 
+  std::list<Ship>::iterator i;
+  for(i = ships.begin(); i != ships.end(); ++i)
+  {
+    half_width = i->get_width() / 2; 
+    half_height = i->get_height() / 2; 
+    r_edge = i->get_x() + half_width;
+    l_edge = i->get_x() - half_width;
+    t_edge = i->get_y() - half_height;
+    b_edge = i->get_y() + half_height;
+    i->update();
+    if(i->get_sprite() != 0)
+	rcore->draw_image(i->get_sprite(), 
+			  i->get_x() - half_width,
+			  i->get_y() - half_height,
+			  i->get_frame());
+  }
+
+  std::list<Bullet>::iterator iter = bullets.begin();
   while(iter != bullets.end())
   {
     half_width = iter->get_width() / 2; 
@@ -112,7 +133,6 @@ void Engine::update_actors()
 			  iter->get_frame());
       ++iter;
     }
-    
   }
 }
 
