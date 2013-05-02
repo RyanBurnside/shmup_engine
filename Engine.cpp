@@ -61,26 +61,21 @@ void Engine::main_loop()
   std::stringstream ss; // used to append numbers to strings
 
   // timing taken from http://sdl.beuc.net/sdl.wiki/Time_Examples
+  Uint32 frameRate = 60;
+  Uint32 frameMs = 1000/frameRate;
+  Uint32 endMs, delayMs, startMs = 0;
 
-  double nextFrame = static_cast<double>(SDL_GetTicks());
   while(1)
   {
     if(rcore->chk_quit() == true)
       exit(0);
+    startMs = SDL_GetTicks();  
     rcore->clear_screen();
     update_actors();
-    if(nextFrame > static_cast<double>(SDL_GetTicks()))
-    {
-      rcore->blit_screen();
-    }
-    
-    Uint32 delay = static_cast<Uint32>(nextFrame - 
-				       static_cast<double>(SDL_GetTicks()));
-    if(delay > 0)
-    {
-      SDL_Delay(delay);
-    }
-    nextFrame += 1000.0 / 60.0;
+    rcore->blit_screen();
+    endMs = SDL_GetTicks();
+    delayMs = frameMs - (endMs - startMs);
+    SDL_Delay(delayMs);
   } 
 }   
 
